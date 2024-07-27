@@ -20,7 +20,3 @@ DealerDash is a modern, efficient dashboard management system for car dealership
 - Customer relationship management (CRM) tools
 - Financial reporting and forecasting
 - User authentication and role-based access control
-
-## 🚀 Getting Started
-
-1. Clone the repository:
