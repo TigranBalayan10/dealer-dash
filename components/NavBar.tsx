@@ -20,9 +20,6 @@ export function Navbar() {
                     <Link href="/login" className="text-blue-600 hover:underline">
                         Login
                     </Link>
-                    <Link href="/sign-up" className="text-blue-600 hover:underline">
-                        Sign Up
-                    </Link>
                 </SignedOut>
             </div>
         </nav>

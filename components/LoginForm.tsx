@@ -86,11 +86,6 @@ export function LoginForm() {
                 />
                 {error && <p className="text-red-500">{error}</p>}
                 <Button type="submit">Sign In</Button>
-                <Button variant="link">
-                    <Link href="/forgot-password">
-                        Forgot password?
-                    </Link>
-                </Button>
             </form>
         </Form>
     )
