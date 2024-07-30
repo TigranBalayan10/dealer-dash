@@ -16,28 +16,24 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-
-const formSchema = z.object({
-    email: z.string().email("Invalid email address."),
-    password: z.string().min(1, "Password is required."),
-})
-
-type FormData = z.infer<typeof formSchema>
+import { loginSchema } from '@/lib/zodSchemas'
+import { LoginData } from '@/lib/zodSchemas'
+import Link from 'next/link'
 
 export function LoginForm() {
     const { isLoaded, signIn, setActive } = useSignIn()
     const [error, setError] = useState("")
     const router = useRouter()
 
-    const form = useForm<FormData>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<LoginData>({
+        resolver: zodResolver(loginSchema),
         defaultValues: {
             email: "",
             password: "",
         },
     })
 
-    async function onSubmit(data: FormData) {
+    async function onSubmit(data: LoginData) {
         if (!isLoaded) return
 
         try {
@@ -90,6 +86,11 @@ export function LoginForm() {
                 />
                 {error && <p className="text-red-500">{error}</p>}
                 <Button type="submit">Sign In</Button>
+                <Button variant="link">
+                    <Link href="/forgot-password">
+                        Forgot password?
+                    </Link>
+                </Button>
             </form>
         </Form>
     )
