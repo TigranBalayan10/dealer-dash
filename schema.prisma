@@ -13,12 +13,12 @@ datasource db {
 model User {
     id           String   @id @default(cuid())
     clerkId      String?  @unique
-    firsName     String?
+    firstName    String?
     lastName     String?
     organization String?
     subscribed   Boolean  @default(false)
-    email        String?  @unique
-    phone       String?
+    email        String  @unique
+    phone        String
     createdAt    DateTime @default(now()) @map(name: "created_at")
     updatedAt    DateTime @updatedAt @map(name: "updated_at")
 
