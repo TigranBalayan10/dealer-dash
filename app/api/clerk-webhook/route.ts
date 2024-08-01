@@ -64,13 +64,6 @@ export async function POST(req: Request) {
           const email = eventData.email_addresses[0]?.email_address ?? "";
           const phone =
             (eventData as any).phone_numbers?.[0]?.phone_number ?? "";
-          console.log("User data", {
-            userId,
-            firstName,
-            lastName,
-            email,
-            phone,
-          });
           await prisma.user.upsert({
             where: { clerkId: userId },
             update: {

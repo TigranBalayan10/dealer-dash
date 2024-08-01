@@ -17,7 +17,7 @@ model User {
     lastName     String?
     organization String?
     subscribed   Boolean  @default(false)
-    email        String  @unique
+    email        String   @unique
     phone        String
     createdAt    DateTime @default(now()) @map(name: "created_at")
     updatedAt    DateTime @updatedAt @map(name: "updated_at")

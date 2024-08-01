@@ -11,11 +11,6 @@ if (process.env.NODE_ENV === "production") {
 } else {
   if (!global.prisma) {
     global.prisma = new PrismaClient();
-
-    // Add shutdown hook
-    process.on("beforeExit", async () => {
-      await global.prisma?.$disconnect();
-    });
   }
   prisma = global.prisma;
 }
