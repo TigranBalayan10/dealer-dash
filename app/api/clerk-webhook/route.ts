@@ -56,6 +56,17 @@ export async function POST(req: Request) {
 
     switch (type) {
       case "user.created":
+        if ("email_addresses" in eventData) {
+          await prisma.user.create({
+            data: {
+              clerkId: eventData.id,
+              firstName: eventData.first_name ?? "",
+              lastName: eventData.last_name ?? "",
+              email: eventData.email_addresses[0]?.email_address ?? "",
+              phone: eventData.phone_numbers?.[0]?.phone_number ?? "",
+            },
+          });
+        }
       case "user.updated":
         if ("id" in eventData && "email_addresses" in eventData) {
           const userId = eventData.id;
