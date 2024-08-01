@@ -1,9 +1,13 @@
 // components/Navbar.tsx
+"use client"
 import Link from 'next/link'
 import { SignedIn, SignedOut } from '@clerk/nextjs'
 import { LogoutButton } from './LogoutButton'
+import { usePathname } from 'next/navigation'
+import path from 'path'
 
 export function Navbar() {
+    const pathname = usePathname()
     return (
         <nav className="flex justify-between items-center p-4 bg-gray-100">
             <Link href="/" className="text-xl font-bold">
@@ -11,9 +15,15 @@ export function Navbar() {
             </Link>
             <div className="space-x-4">
                 <SignedIn>
-                    <Link href="/dashboard" className="text-blue-600 hover:underline">
-                        Dashboard
-                    </Link>
+                    {pathname === "/admin" ? (
+                        <Link href="/admin" className="text-blue-600 hover:underline">
+                            Admin Dashboard
+                        </Link>
+                    ) : (
+                        <Link href="/dashboard" className="text-blue-600 hover:underline">
+                            Dashboard
+                        </Link>
+                    )}
                     <LogoutButton />
                 </SignedIn>
                 <SignedOut>
