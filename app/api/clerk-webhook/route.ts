@@ -34,6 +34,7 @@ export async function POST(req: Request) {
   const wh = new Webhook(WEBHOOK_SECRET);
 
   let evt: WebhookEvent;
+  console.log("Received webhook:", body);
 
   // Verify the payload with the headers
   try {
@@ -67,6 +68,7 @@ export async function POST(req: Request) {
             },
           });
         }
+        break;
       case "user.updated":
         if ("id" in eventData && "email_addresses" in eventData) {
           const userId = eventData.id;

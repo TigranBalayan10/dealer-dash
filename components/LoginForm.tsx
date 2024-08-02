@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useSignIn } from "@clerk/nextjs"
 import { useRouter } from 'next/navigation'
+import { CustomFormField } from './CustomFormFields/CustomFormField'
 import { Button } from "@/components/ui/button"
 import {
     Form,
@@ -56,31 +57,18 @@ export function LoginForm() {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
+                <CustomFormField<LoginData>
+                    form={form}
                     name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <Input placeholder="john@example.com" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                    label="Email"
+                    placeholder="john@example.com"
+                    type="email"
                 />
-                <FormField
-                    control={form.control}
+                <CustomFormField<LoginData>
+                    form={form}
                     name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                                <Input type="password" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                    label="Password"
+                    type="password"
                 />
                 {error && <p className="text-red-500">{error}</p>}
                 <Button type="submit">Sign In</Button>
