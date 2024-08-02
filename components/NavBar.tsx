@@ -15,7 +15,7 @@ export function Navbar() {
             </Link>
             <div className="space-x-4">
                 <SignedIn>
-                    {pathname === "/admin" ? (
+                    {pathname.includes("admin") ? (
                         <Link href="/admin" className="text-blue-600 hover:underline">
                             Admin Dashboard
                         </Link>
