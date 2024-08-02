@@ -5,11 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { CustomFormField } from './CustomFormFields/CustomFormField'
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
+import { createUser } from "@/actions/userAction"
 import { userSchema } from "@/lib/zodSchemas"
 import { UserData } from "@/lib/zodSchemas"
+import { useState } from "react"
 
 export function AddUserForm() {
-
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const form = useForm<UserData>({
         resolver: zodResolver(userSchema),
         defaultValues: {
@@ -22,9 +24,19 @@ export function AddUserForm() {
             phone: "",
         },
     })
+    const onSubmit = async (data: UserData) => {
+        setSubmitStatus('loading')
+        const result = await createUser(data)
+        if (result.success) {
+            setSubmitStatus('success')
+            form.reset()
+        } else {
+            setSubmitStatus('error')
+        }
+    }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(data => console.log(data))} className="space-y-8 mx-10">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mx-10">
                 <CustomFormField<UserData>
                     form={form}
                     name="clerkId"
@@ -62,7 +74,11 @@ export function AddUserForm() {
                     label="Phone"
                     placeholder="1234567890"
                 />
-                <Button type="submit">Add User</Button>
+                <Button type="submit" disabled={submitStatus === 'loading'}>
+                    {submitStatus === 'loading' ? 'Adding User...' : 'Add User'}
+                </Button>
+                {submitStatus === 'success' && <p className="text-green-500">User added successfully!</p>}
+                {submitStatus === 'error' && <p className="text-red-500">Failed to add user. Please try again.</p>}
             </form>
         </Form>
     )
