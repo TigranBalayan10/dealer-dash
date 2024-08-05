@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { SignedIn, SignedOut } from '@clerk/nextjs'
 import { LogoutButton } from './LogoutButton'
 import { usePathname } from 'next/navigation'
-import path from 'path'
 
 export function Navbar() {
     const pathname = usePathname()
