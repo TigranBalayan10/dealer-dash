@@ -1,21 +1,25 @@
-import { Payment, columns } from "./columns"
+import { columns } from "./columns"
+import { auth } from '@clerk/nextjs/server';
 import { DataTable } from "@/components/ui/data-table"
+import prisma from "@/lib/prisma"
 
-async function getData(): Promise<Payment[]> {
-    // Fetch data from your API here.
-    return [
-        {
-            id: "728ed52f",
-            amount: 100,
-            status: "pending",
-            email: "m@example.com",
+const getData = async (userId: string) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            clerkId: userId,
         },
-        // ...
-    ]
+    })
+
+    return await prisma.inventoryItem.findMany({
+        where: {
+            userId: user?.id,
+        },
+    })
 }
 
 const InventoryPage = async () => {
-    const data = await getData()
+    const { userId } = auth()
+    const data = await getData(userId || '')
 
     return (
         <div className="container mx-auto py-10">
