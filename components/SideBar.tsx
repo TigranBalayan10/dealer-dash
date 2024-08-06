@@ -16,7 +16,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
           <div className="space-y-1">
             <Link href="/dashboard" className="flex items-center rounded-lg px-3 py-2 text-secondary hover:bg-secondary hover:text-primary">
               <Icon icon="mdi:view-dashboard" className="mr-2 h-4 w-4" />
-              Dashboard
+              Overview
             </Link>
             <Link href="/inventory" className="flex items-center rounded-lg px-3 py-2 text-secondary hover:bg-secondary hover:text-primary">
               <Icon icon="mdi:package-variant-closed" className="mr-2 h-4 w-4" />

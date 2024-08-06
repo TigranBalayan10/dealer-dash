@@ -21,17 +21,11 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
-          <div className="flex h-screen">
-            <Sidebar className="w-64 border-r" />
-            <div className="flex flex-col flex-1">
-              <Navbar />
-              <main className="flex-1 p-6 overflow-auto">
-                {children}
-              </main>
-            </div>
-          </div>
+          <main className="flex-1 overflow-auto">
+            {children}
+          </main>
         </body>
       </html>
-    </ClerkProvider>
+    </ClerkProvider >
   );
 }

@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "npx prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "node seedDatabase.js"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.2.8",
+    "@faker-js/faker": "^8.4.1",
     "@hookform/resolvers": "^3.9.0",
     "@iconify/react": "^5.0.2",
     "@prisma/client": "^5.17.0",
