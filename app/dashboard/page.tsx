@@ -31,7 +31,6 @@ const Dashboard = async () => {
                         {customers.map((customer) => (
                             <li key={customer.id}>{customer.ssn}</li>
                         ))}
-
                     </ul>
                 </>
             ) : (
