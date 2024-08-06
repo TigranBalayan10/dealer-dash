@@ -1,4 +1,4 @@
-import { auth, currentUser } from '@clerk/nextjs/server';
+import { auth } from '@clerk/nextjs/server';
 import prisma from "@/lib/prisma";
 
 const getUser = async (userId: string) => {
@@ -12,6 +12,11 @@ const getUser = async (userId: string) => {
 const Dashboard = async () => {
     const { userId } = auth();
     const user = await getUser(userId || '');
+    const customers = await prisma.customer.findMany({
+        where: {
+            userId: user?.id,
+        },
+    });
 
     return (
         <div>
@@ -21,6 +26,13 @@ const Dashboard = async () => {
                     <p>Welcome, {user.firstName} {user.lastName}!</p>
                     <p>Your email address is {user.email}.</p>
                     <p>Business is {user.businessName}</p>
+                    <h1>Customers</h1>
+                    <ul>
+                        {customers.map((customer) => (
+                            <li key={customer.id}>{customer.ssn}</li>
+                        ))}
+
+                    </ul>
                 </>
             ) : (
                 <p>Loading user information...</p>
