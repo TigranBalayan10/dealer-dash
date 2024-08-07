@@ -1,8 +1,8 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { InventoryItem, Status } from "@prisma/client"
-import { formatDate } from "@/lib/dateFormatter"
+import { Customer } from "@prisma/client"
+import { formatDate, formatDateShort } from "@/lib/dateFormatter"
 import { Icon } from '@iconify/react';
 import { Button } from "@/components/ui/button"
 import {
@@ -14,28 +14,16 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link";
 
-export const columns: ColumnDef<InventoryItem>[] = [
+export const columns: ColumnDef<Customer>[] = [
     {
-        accessorKey: "make",
-        header: "Make",
-    },
-    {
-        accessorKey: "model",
-        header: "Model",
-    },
-    {
-        accessorKey: "year",
-        header: "Year",
-    },
-    {
-        accessorKey: "price",
+        accessorKey: "firstName",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Price
+                    First Name
                     {column.getIsSorted() ? (
                         <Icon
                             icon={
@@ -49,36 +37,50 @@ export const columns: ColumnDef<InventoryItem>[] = [
                 </Button>
             )
         },
+    },
+    {
+        accessorKey: "lastName",
+        header: "Last Name",
+    },
+    {
+        accessorKey: "email",
+        header: "Email",
+    },
+    {
+        accessorKey: "phone",
+        header: "Phone",
+    },
+    {
+        accessorKey: "address",
+        header: "Address",
+    },
+    {
+        accessorKey: "city",
+        header: "City",
+    },
+    {
+        accessorKey: "state",
+        header: "State",
+    },
+    {
+        accessorKey: "zipCode",
+        header: "Zip Code",
+    },
+    {
+        accessorKey: "ssn",
+        header: "SSN",
+    },
+    {
+        accessorKey: "dateOfBirth",
+        header: "Date of Birth",
         cell: ({ row }) => {
-            return (
-                <div className="text-left">
-                    {new Intl.NumberFormat("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                    }).format(row.original.price)}
-                </div>
-            )
-        },
+            const date = row.getValue("createdAt") as Date;
+            return formatDateShort(date);
+        }
     },
     {
-        accessorKey: "description",
-        header: "Description",
-    },
-    {
-        accessorKey: "status",
-        header: "Status",
-        cell: ({ row }) => {
-            const status = row.getValue("status") as Status;
-            return status === Status.SOLD ? (
-                <span className="bg-red-500 text-secondary p-1 rounded-sm">SOLD</span>
-            ) : (
-                <span className="bg-green-600 text-secondary p-1 rounded-sm">AVAILABLE</span>
-            );
-        },
-    },
-    {
-        accessorKey: "vin",
-        header: "VIN",
+        accessorKey: "licenseNumber",
+        header: "DL Number",
     },
     {
         accessorKey: "createdAt",
@@ -91,7 +93,7 @@ export const columns: ColumnDef<InventoryItem>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
-            const InventoryItem = row.original
+            const customer = row.original
 
             return (
                 <DropdownMenu>
@@ -104,13 +106,8 @@ export const columns: ColumnDef<InventoryItem>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem>
-                            <Link href={`/dashboard/inventory/${InventoryItem.id}`}>
-                                View inventory
-                            </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Link href={`/dashboard/inventory/edit/${InventoryItem.id}`}>
-                                Edit inventory
+                            <Link href={`/dashboard/customers/${customer.id}`}>
+                                View customer
                             </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>

@@ -10,22 +10,23 @@ const getData = async (userId: string) => {
         },
     })
 
-    return await prisma.inventoryItem.findMany({
+    return await prisma.customer.findMany({
         where: {
             userId: user?.id,
         },
     })
 }
 
-const InventoryPage = async () => {
+
+
+const CustomersPage = async () => {
     const { userId } = auth()
     const data = await getData(userId || '')
-
     return (
-        <div className="container mx-auto py-10">
-            <DataTable columns={columns} data={data} searchPlaceholder="Filter by make..." searchColumn="make" />
+        <div className="py-10">
+            <DataTable columns={columns} data={data} searchPlaceholder="Filter by First Name..." searchColumn="firstName" />
         </div>
     )
 }
 
-export default InventoryPage
+export default CustomersPage
