@@ -3,7 +3,16 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { InventoryItem, Status } from "@prisma/client"
 import { formatDate } from "@/lib/dateFormatter"
-
+import { Icon } from '@iconify/react';
+import { Button } from "@/components/ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export const columns: ColumnDef<InventoryItem>[] = [
     {
@@ -20,7 +29,26 @@ export const columns: ColumnDef<InventoryItem>[] = [
     },
     {
         accessorKey: "price",
-        header: "Price",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Price
+                    {column.getIsSorted() ? (
+                        <Icon
+                            icon={
+                                column.getIsSorted() === "asc"
+                                    ? "mdi:arrow-up"
+                                    : "mdi:arrow-down"
+                            }
+                            className="h-4 w-4"
+                        />
+                    ) : <Icon icon="mdi:arrow-up-down" className="h-4 w-4" />}
+                </Button>
+            )
+        },
         cell: ({ row }) => {
             return (
                 <div className="text-left">
@@ -59,5 +87,33 @@ export const columns: ColumnDef<InventoryItem>[] = [
             const date = row.getValue("createdAt") as Date;
             return formatDate(date);
         }
+    },
+    {
+        id: "actions",
+        cell: ({ row }) => {
+            const InventoryItem = row.original
+
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <Icon icon="mdi:more-horiz" className="h-5 w-5" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem
+                            onClick={() => navigator.clipboard.writeText(InventoryItem.id)}
+                        >
+                            Copy payment ID
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>View customer</DropdownMenuItem>
+                        <DropdownMenuItem>View payment details</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )
+        },
     },
 ]
