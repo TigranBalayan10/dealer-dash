@@ -26,9 +26,9 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
               <Icon icon="mdi:account-group" className="mr-2 h-4 w-4" />
               Customers
             </Link>
-            <Link href="/finances" className="flex items-center rounded-lg px-3 py-2 text-secondary hover:bg-secondary hover:text-primary">
+            <Link href="/dashboard/transactions" className="flex items-center rounded-lg px-3 py-2 text-secondary hover:bg-secondary hover:text-primary">
               <Icon icon="mdi:cash" className="mr-2 h-4 w-4" />
-              Finances
+              Transactions
             </Link>
           </div>
         </div>
