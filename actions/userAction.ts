@@ -9,9 +9,9 @@ export async function createUser(data: UserData) {
       data: {
         clerkId: data.clerkId,
         email: data.email,
+        businessName: data.businessName,
         firstName: data.firstName,
         lastName: data.lastName,
-        organization: data.organization,
         subscribed: data.subscribed,
         phone: data.phone,
       },

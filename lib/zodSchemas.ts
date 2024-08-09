@@ -10,7 +10,7 @@ export const userSchema = z.object({
   email: z.string().trim().toLowerCase().email({ message: "Invalid email" }),
   firstName: z.string().trim().min(1, "First name is required."),
   lastName: z.string().trim().min(1, "Last name is required."),
-  organization: z.string().optional(),
+  businessName: z.string().optional(),
   subscribed: z.boolean().default(false),
   phone: z
     .string()
