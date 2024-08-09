@@ -21,21 +21,17 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { ColumnVisibilityDropdown } from "./ColumnVisibilityDropdown"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[],
     searchColumn?: string
     searchPlaceholder?: string
+    visibleColumns?: string[]
 }
 
 export function DataTable<TData, TValue>({
@@ -43,11 +39,32 @@ export function DataTable<TData, TValue>({
     data,
     searchColumn,
     searchPlaceholder = "Filter...",
+    visibleColumns, // Optional prop to specify which columns to show in the dropdown
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-
+    // Effect to update column visibility when visibleColumns prop changes
+    useEffect(() => {
+        if (visibleColumns) {
+            const newVisibility: VisibilityState = {};
+            columns.forEach((column) => {
+                if ('accessorKey' in column) {
+                    newVisibility[column.accessorKey as string] = visibleColumns.includes(column.accessorKey as string);
+                }
+            });
+            setColumnVisibility(newVisibility);
+        } else {
+            // If visibleColumns is not provided, show all columns
+            const newVisibility: VisibilityState = {};
+            columns.forEach((column) => {
+                if ('accessorKey' in column) {
+                    newVisibility[column.accessorKey as string] = true;
+                }
+            });
+            setColumnVisibility(newVisibility);
+        }
+    }, [visibleColumns, columns]);
 
     const table = useReactTable({
         data,
@@ -79,34 +96,7 @@ export function DataTable<TData, TValue>({
                         className="max-w-sm"
                     />
                 )}
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter(
-                                (column) => column.getCanHide()
-                            )
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <ColumnVisibilityDropdown table={table} />
             </div>
             <div className="rounded-md border">
                 <Table>
