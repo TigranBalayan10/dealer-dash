@@ -19,7 +19,7 @@ export function AddUserForm() {
             email: "",
             firstName: "",
             lastName: "",
-            organization: "",
+            businessName: "",
             subscribed: false,
             phone: "",
         },
