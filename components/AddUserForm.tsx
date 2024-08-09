@@ -64,7 +64,7 @@ export function AddUserForm() {
                 />
                 <CustomFormField<UserData>
                     form={form}
-                    name="organization"
+                    name="businessName"
                     label="Organization"
                     placeholder="ABC Inc."
                 />
