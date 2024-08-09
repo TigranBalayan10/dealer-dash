@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Transaction, TransactionType, Customer, InventoryItem } from "@prisma/client"
-import { formatDate, formatDateShort } from "@/lib/dateFormatter"
+import { formatDateShort } from "@/lib/dateFormatter"
 import { Icon } from '@iconify/react';
 import { Button } from "@/components/ui/button"
 import {
@@ -24,7 +24,7 @@ export const columns: ColumnDef<Transaction>[] = [
                 return (
                     <Link
                         href={`/dashboard/customers/${customer.id}`}
-                        className="whitespace-nowrap text-[clamp(0.75rem,2vw,0.875rem)] overflow-hidden text-ellipsis"
+                        className="whitespace-nowrap text-[clamp(0.75rem,2vw,0.875rem)] overflow-hidden text-ellipsis hover:underline"
                     >
                         {customer.firstName} {customer.lastName}
                     </Link>
@@ -41,7 +41,7 @@ export const columns: ColumnDef<Transaction>[] = [
         cell: ({ row }) => {
             const inventoryItem = row.getValue("inventoryItem") as InventoryItem | null
             if (inventoryItem) {
-                return inventoryItem.make + " " + inventoryItem.model
+                return inventoryItem.year + " " + inventoryItem.make + " " + inventoryItem.model
             }
 
             return "No item"
@@ -92,7 +92,26 @@ export const columns: ColumnDef<Transaction>[] = [
     },
     {
         accessorKey: "date",
-        header: "Date",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Date
+                    {column.getIsSorted() ? (
+                        <Icon
+                            icon={
+                                column.getIsSorted() === "asc"
+                                    ? "mdi:arrow-up"
+                                    : "mdi:arrow-down"
+                            }
+                            className="h-4 w-4"
+                        />
+                    ) : <Icon icon="mdi:arrow-up-down" className="h-4 w-4" />}
+                </Button>
+            )
+        },
         cell: ({ row }) => formatDateShort(row.getValue("date") as Date),
     },
     {

@@ -23,7 +23,7 @@ export const columns: ColumnDef<Customer>[] = [
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    First Name
+                    Name
                     {column.getIsSorted() ? (
                         <Icon
                             icon={
@@ -37,10 +37,17 @@ export const columns: ColumnDef<Customer>[] = [
                 </Button>
             )
         },
-    },
-    {
-        accessorKey: "lastName",
-        header: "Last Name",
+        cell: ({ row }) => {
+            const customer = row.original
+            return (
+                <Link
+                    href={`/dashboard/customers/${customer.id}`}
+                    className="whitespace-nowrap text-[clamp(0.75rem,2vw,0.875rem)] overflow-hidden text-ellipsis hover:underline"
+                >
+                    {customer.firstName} {customer.lastName}
+                </Link>
+            );
+        }
     },
     {
         accessorKey: "email",
@@ -53,18 +60,12 @@ export const columns: ColumnDef<Customer>[] = [
     {
         accessorKey: "address",
         header: "Address",
-    },
-    {
-        accessorKey: "city",
-        header: "City",
-    },
-    {
-        accessorKey: "state",
-        header: "State",
-    },
-    {
-        accessorKey: "zipCode",
-        header: "Zip Code",
+        cell: ({ row }) => {
+            const customer = row.original
+            return (
+                <p>{customer.address}<br />{customer.city}, {customer.state} {customer.zipCode}</p>
+            )
+        }
     },
     {
         accessorKey: "ssn",
@@ -72,7 +73,7 @@ export const columns: ColumnDef<Customer>[] = [
     },
     {
         accessorKey: "dateOfBirth",
-        header: "Date of Birth",
+        header: "DOB",
         cell: ({ row }) => {
             const date = row.getValue("createdAt") as Date;
             return formatDateShort(date);
