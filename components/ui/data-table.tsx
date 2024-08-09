@@ -98,7 +98,7 @@ export function DataTable<TData, TValue>({
                 )}
                 <ColumnVisibilityDropdown table={table} />
             </div>
-            <div className="rounded-md border">
+            <div className="rounded-md border bg-white">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (

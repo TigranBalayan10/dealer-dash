@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Sidebar className="w-64 border-r" />
                 <div className="flex flex-col flex-1">
                     <Navbar />
-                    <div className="flex-1 p-6 overflow-auto">
+                    <div className="flex-1 p-6 overflow-auto bg-secondary">
                         {children}
                     </div>
                 </div>

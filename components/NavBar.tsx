@@ -22,7 +22,7 @@ export function Navbar() {
     const pathname = usePathname();
 
     return (
-        <nav className="flex items-center justify-between p-4 bg-secondary border-b">
+        <nav className="flex items-center justify-between p-4 bg-primary border-b">
             <div className="flex items-center">
                 <Input
                     type="search"
