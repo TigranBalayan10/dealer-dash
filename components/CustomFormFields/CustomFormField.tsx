@@ -34,21 +34,24 @@ export function CustomFormField<T extends Record<string, any>>({
                 <FormItem>
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
-                    <Controller
+                        <Controller
                             name={name}
                             control={form.control}
                             render={({ field: controllerField }) => (
                                 <InputComponent
                                     placeholder={placeholder}
                                     type={type}
+                                    inputMode={type === 'number' ? 'numeric' : 'text'}
+                                    pattern={type === 'number' ? '[0-9]*' : undefined}
                                     {...controllerField}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        const value = type === 'number' ? 
-                                            e.target.value === '' ? null : Number(e.target.value) 
+                                        const value = type === 'number' ?
+                                            e.target.value === '' ? null : Number(e.target.value)
                                             : e.target.value;
                                         controllerField.onChange(value);
                                     }}
                                 />
+
                             )}
                         />
                     </FormControl>
