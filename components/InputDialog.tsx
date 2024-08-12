@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog"
 import { Icon } from "@iconify/react/dist/iconify.js"
 import { CustomFormField } from "./CustomFormFields/CustomFormField"
+import { CustomSelectField } from "./CustomFormFields/CustomSelectField";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { inventoryItemSchema } from "@/lib/zodSchemas"
@@ -111,6 +112,17 @@ const InputDialog = () => {
                                 placeholder="eg. 1HGCM82633A404352"
                             />
                         </div>
+                        <CustomSelectField<InventoryItemData>
+                            form={form}
+                            name="status"
+                            label="Status"
+                            options={[
+                                { value: "AVAILABLE", label: "Available" },
+                                { value: "RESERVED", label: "Reserved" },
+                                { value: "SOLD", label: "Sold" },
+                                { value: "LEASED", label: "Leased" },
+                            ]}
+                        />
                         <DialogFooter>
                             <Button type="submit" disabled={submitStatus === 'loading'}>
                                 {submitStatus === 'loading' ? 'Adding Item...' : 'Add Item'}
