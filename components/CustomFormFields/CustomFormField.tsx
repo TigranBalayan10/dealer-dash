@@ -1,5 +1,5 @@
 import React from 'react';
-import { UseFormReturn, FieldPath } from 'react-hook-form';
+import { UseFormReturn, FieldPath, Controller } from 'react-hook-form';
 import {
     FormField,
     FormItem,
@@ -34,10 +34,22 @@ export function CustomFormField<T extends Record<string, any>>({
                 <FormItem>
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
-                        <InputComponent
-                            placeholder={placeholder}
-                            type={type}
-                            {...field}
+                    <Controller
+                            name={name}
+                            control={form.control}
+                            render={({ field: controllerField }) => (
+                                <InputComponent
+                                    placeholder={placeholder}
+                                    type={type}
+                                    {...controllerField}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        const value = type === 'number' ? 
+                                            e.target.value === '' ? null : Number(e.target.value) 
+                                            : e.target.value;
+                                        controllerField.onChange(value);
+                                    }}
+                                />
+                            )}
                         />
                     </FormControl>
                     <FormMessage />

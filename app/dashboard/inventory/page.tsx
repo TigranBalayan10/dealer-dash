@@ -1,6 +1,7 @@
 import { columns } from "./columns"
 import { auth } from '@clerk/nextjs/server';
 import { DataTable } from "@/components/ui/data-table"
+import InputDialog from "@/components/InputDialog";
 import prisma from "@/lib/prisma"
 
 const getData = async (userId: string) => {
@@ -23,6 +24,7 @@ const InventoryPage = async () => {
 
     return (
         <div className="py-10">
+            <InputDialog />
             <DataTable columns={columns} data={data} searchPlaceholder="Filter by make..." searchColumn="make" />
         </div>
     )
