@@ -4,6 +4,7 @@
 import prisma from "@/lib/prisma";
 import { InventoryItemData } from "@/lib/zodSchemas";
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 
 export async function addInventory(data: InventoryItemData) {
   try {
@@ -28,7 +29,7 @@ export async function addInventory(data: InventoryItemData) {
         userId: user.id, // Use the database user ID
       },
     });
-
+    revalidatePath("/dashboard/inventory");
     return { success: true, inventory: newInventory };
   } catch (error) {
     console.error("Failed to add inventory:", error);

@@ -21,6 +21,7 @@ import { parseZodSchema } from "@/lib/zodSchemas";
 import { useState } from "react"
 import { Form } from "./ui/form"
 import { addInventory } from "@/actions/addInventoryAction";
+import ButtonSubmit from "./ButtonSubmit";
 
 const InputDialog = () => {
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -54,6 +55,9 @@ const InputDialog = () => {
             if (result.success) {
                 setSubmitStatus('success')
                 form.reset()
+                setTimeout(() => {
+                    setSubmitStatus('idle')
+                }, 2000)
             } else {
                 setSubmitStatus('error')
             }
@@ -141,14 +145,13 @@ const InputDialog = () => {
                             ]}
                         />
                         <DialogFooter>
-                            <Button type="submit" disabled={submitStatus === 'loading'}>
-                                {submitStatus === 'loading' ? 'Adding Item...' : 'Add Item'}
-                            </Button>
+                            <ButtonSubmit
+                                submitStatus={submitStatus}
+                                buttonText="Add Inventory"
+                            />
                         </DialogFooter>
                     </form>
                 </Form>
-                {submitStatus === 'success' && <p className="text-green-500">Inventory added successfully!</p>}
-                {submitStatus === 'error' && <p className="text-red-500">Failed to add Inventory. Please try again.</p>}
             </DialogContent>
         </Dialog>
     )
