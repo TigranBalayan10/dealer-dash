@@ -20,6 +20,7 @@ import { InventoryItemData } from "@/lib/zodSchemas"
 import { parseZodSchema } from "@/lib/zodSchemas";
 import { useState } from "react"
 import { Form } from "./ui/form"
+import { addInventory } from "@/actions/addInventoryAction";
 
 const InputDialog = () => {
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -39,14 +40,30 @@ const InputDialog = () => {
         setSubmitStatus('loading')
         try {
             const parsedData = parseZodSchema(inventoryItemSchema, data);
-            console.log(parsedData)
-            setSubmitStatus('success')
-            form.reset()
+            // Ensure year and price are numbers
+            if (parsedData.year === null || parsedData.price === null) {
+                throw new Error("Year and price must be provided");
+            }
+
+            const result = await addInventory({
+                ...parsedData,
+                year: parsedData.year,
+                price: parsedData.price,
+                status: parsedData.status,
+            });
+            if (result.success) {
+                setSubmitStatus('success')
+                form.reset()
+            } else {
+                setSubmitStatus('error')
+            }
         } catch (error) {
-            console.error(error)
+            console.error("Error submitting form:", error);
             setSubmitStatus('error')
         }
     }
+
+    console.log("watch selected status", form.watch("status"))
 
 
     return (

@@ -1,6 +1,5 @@
-// CustomSelectField.tsx
 import React from 'react';
-import { UseFormReturn, FieldPath, Controller } from 'react-hook-form';
+import { UseFormReturn, FieldPath } from 'react-hook-form';
 import {
     FormField,
     FormItem,
@@ -44,27 +43,21 @@ export function CustomSelectField<T extends Record<string, any>>({
                 <FormItem>
                     <FormLabel>{label}</FormLabel>
                     <FormControl>
-                        <Controller
-                            name={name}
-                            control={form.control}
-                            render={({ field: controllerField }) => (
-                                <Select
-                                    onValueChange={controllerField.onChange}
-                                    defaultValue={controllerField.value}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder={placeholder} />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {options.map((option) => (
-                                            <SelectItem key={option.value} value={option.value}>
-                                                {option.label}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            )}
-                        />
+                        <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder={placeholder} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {options.map((option) => (
+                                    <SelectItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </FormControl>
                     <FormMessage />
                 </FormItem>

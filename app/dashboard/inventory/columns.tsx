@@ -69,11 +69,18 @@ export const columns: ColumnDef<InventoryItem>[] = [
         header: "Status",
         cell: ({ row }) => {
             const status = row.getValue("status") as Status;
-            return status === Status.SOLD ? (
-                <span className="bg-red-500 text-secondary p-1 rounded-sm">SOLD</span>
-            ) : (
-                <span className="bg-green-600 text-secondary p-1 rounded-sm">AVAILABLE</span>
-            );
+            switch (status) {
+                case Status.SOLD:
+                    return <span className="bg-red-500 text-secondary p-1 rounded-sm">SOLD</span>;
+                case Status.AVAILABLE:
+                    return <span className="bg-green-600 text-secondary p-1 rounded-sm">AVAILABLE</span>;
+                case Status.RESERVED:
+                    return <span className="bg-yellow-500 text-secondary p-1 rounded-sm">RESERVED</span>;
+                case Status.LEASED:
+                    return <span className="bg-blue-500 text-secondary p-1 rounded-sm">LEASED</span>;
+                default:
+                    return <span className="bg-gray-500 text-secondary p-1 rounded-sm">{status}</span>;
+            }
         },
     },
     {
