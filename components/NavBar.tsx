@@ -9,16 +9,20 @@ import { LogoutButton } from './LogoutButton';
 import { Icon } from '@iconify/react';
 import { Input } from "@/components/ui/input";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export function Navbar() {
+interface NavBarProps {
+    title: string | null;
+}
+
+export function NavBar({ title }: NavBarProps) {
     const pathname = usePathname();
 
     return (
@@ -29,6 +33,11 @@ export function Navbar() {
                     placeholder="Search..."
                     className="w-64 mr-4"
                 />
+            </div>
+            <div>
+                <h1 className="text-secondary">
+                    Welcome <span className="italic font-semibold">{title}</span>
+                </h1>
             </div>
             <div className="flex items-center space-x-4">
                 <SignedIn>
