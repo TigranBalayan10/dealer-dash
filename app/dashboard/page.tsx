@@ -5,30 +5,33 @@ import { columns as InventoryColumns } from './inventory/columns';
 import { columns as CustomersColumns } from './customers/columns';
 import { columns as TransactionsColumns } from './transactions/columns';
 import { calculateMonthlyRevenue, formatCurrency } from "@/lib/monthlyRevenue";
+import { auth } from "@clerk/nextjs/server";
+import { userData } from './layout';
 
-interface DashboardProps {
-    userId: string;
-    businessName: string | null;
-}
+export default async function Dashboard() {
+    const { userId: clerkId } = auth();
+    if (!clerkId) {
+        throw new Error('User not authenticated');
+    }
 
+    const user = await userData(clerkId);
 
-const Dashboard: React.FC<DashboardProps> = async ({ userId, businessName }) => {
     const [customersData, inventoryData, transactionsData] = await Promise.all([
-        prisma.customer.findMany({ where: { userId } }),
-        prisma.inventoryItem.findMany({ where: { userId } }),
+        prisma.customer.findMany({ where: { userId: user.id } }),
+        prisma.inventoryItem.findMany({ where: { userId: user.id } }),
         prisma.transaction.findMany({
-            where: { userId },
+            where: { userId: user.id },
             include: {
                 inventoryItem: true,
                 customer: true,
             }
         })
     ]);
+
     const totalInventory = inventoryData.length;
     const totalCustomers = customersData.length;
     const monthlyRevenue = calculateMonthlyRevenue(transactionsData);
 
-    // Dummy data for overview cards
     const overviewData = [
         { title: "Total Inventory", value: totalInventory.toString() },
         { title: "Total Customers", value: totalCustomers.toString() },
@@ -89,5 +92,3 @@ const Dashboard: React.FC<DashboardProps> = async ({ userId, businessName }) => 
         </div>
     );
 };
-
-export default Dashboard;
