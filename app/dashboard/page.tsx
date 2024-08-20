@@ -6,9 +6,13 @@ import { columns as CustomersColumns } from './customers/columns';
 import { columns as TransactionsColumns } from './transactions/columns';
 import { calculateMonthlyRevenue, formatCurrency } from "@/lib/monthlyRevenue";
 
+interface DashboardProps {
+    userId: string;
+    businessName: string | null;
+}
 
-const Dashboard = async ({ userId }: { userId: string }) => {
 
+const Dashboard: React.FC<DashboardProps> = async ({ userId, businessName }) => {
     const [customersData, inventoryData, transactionsData] = await Promise.all([
         prisma.customer.findMany({ where: { userId } }),
         prisma.inventoryItem.findMany({ where: { userId } }),
