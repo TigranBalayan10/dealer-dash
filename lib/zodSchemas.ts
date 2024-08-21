@@ -48,6 +48,23 @@ export const inventoryItemSchema = z.object({
     .max(17, { message: "VIN must be 17 characters" }),
 });
 
+export const transactionSchema = z.object({
+  type: z.enum(["BROKER", "SELL", "LEASE"], {
+    errorMap: () => ({ message: "Please select a valid transaction type." }),
+  }),
+  amount: z
+    .number({ invalid_type_error: "Price must be a number." })
+    .min(0, "Price cannot be negative.")
+    .nullable(),
+  commission: z
+    .number({ invalid_type_error: "Price must be a number." })
+    .min(0, "Price cannot be negative.")
+    .nullable(),
+  date: z.date().nullable(),
+  notes: z.string().optional(),
+  inventoryItemId: z.string().optional(),
+});
+
 export function parseZodSchema<T>(schema: z.ZodSchema<T>, data: unknown): T {
   return schema.parse(data);
 }
@@ -55,3 +72,4 @@ export function parseZodSchema<T>(schema: z.ZodSchema<T>, data: unknown): T {
 export type LoginData = z.infer<typeof loginSchema>;
 export type UserData = z.infer<typeof userSchema>;
 export type InventoryItemData = z.infer<typeof inventoryItemSchema>;
+export type TransactionData = z.infer<typeof transactionSchema>;

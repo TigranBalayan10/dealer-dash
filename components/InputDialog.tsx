@@ -67,9 +67,6 @@ const InputDialog = () => {
         }
     }
 
-    console.log("watch selected status", form.watch("status"))
-
-
     return (
         <Dialog>
             <DialogTrigger asChild>

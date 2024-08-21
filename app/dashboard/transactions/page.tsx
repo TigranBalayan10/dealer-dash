@@ -1,6 +1,7 @@
 import { columns } from "./columns"
 import { auth } from '@clerk/nextjs/server';
 import { DataTable } from "@/components/ui/data-table"
+import TransactionInputDialog from "@/components/TransactionInputDialog";
 import prisma from "@/lib/prisma"
 
 const getData = async (userId: string) => {
@@ -25,8 +26,8 @@ const FinancesPage = async () => {
     const { userId } = auth()
     const data = await getData(userId || '')
     return (
-        <div>
-            <h1>Transactions</h1>
+        <div className="py-10">
+            <TransactionInputDialog />
             <DataTable
                 columns={columns}
                 data={data}
