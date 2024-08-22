@@ -21,6 +21,7 @@ import { parseZodSchema } from "@/lib/zodSchemas";
 import { useState, useEffect } from "react"
 import { getUserData } from "@/actions/getUserData";
 import { CustomDatePicker } from "./CustomFormFields/CustomDatePicker";
+import { CustomTextareaField } from "./CustomFormFields/CustomTextareaField";
 import { Form } from "./ui/form"
 import ButtonSubmit from "./ButtonSubmit";
 
@@ -150,10 +151,11 @@ const TransactionInputDialog = () => {
                             placeholder="Select transaction date"
                             disabled={(date) => date > new Date()}
                         />
-                        <CustomFormField<TransactionData>
+                        <CustomTextareaField<TransactionData>
                             form={form}
                             name="notes"
                             label="Notes"
+                            placeholder="Enter notes about the transaction"
                         />
                         <DialogFooter>
                             <ButtonSubmit
