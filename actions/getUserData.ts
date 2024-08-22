@@ -14,6 +14,7 @@ export async function getUserData() {
     where: { clerkId },
     select: {
       inventoryItems: true,
+      customers: true,
     },
   });
 
