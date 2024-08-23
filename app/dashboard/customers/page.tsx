@@ -1,6 +1,7 @@
 import { columns } from "./columns"
 import { auth } from '@clerk/nextjs/server';
 import { DataTable } from "@/components/ui/data-table"
+import CustomerInputDialog from "@/components/CustomerInputDialog";
 import prisma from "@/lib/prisma"
 
 const getData = async (userId: string) => {
@@ -24,6 +25,7 @@ const CustomersPage = async () => {
     const data = await getData(userId || '')
     return (
         <div className="py-10">
+            <CustomerInputDialog />
             <DataTable columns={columns} data={data} searchPlaceholder="Filter by First Name..." searchColumn="firstName" />
         </div>
     )
