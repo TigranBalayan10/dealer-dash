@@ -15,14 +15,15 @@ import { Separator } from "./ui/separator";
 import { CustomSelectField } from "./CustomFormFields/CustomSelectField";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { TransactionData, transactionSchema } from "@/lib/zodSchemas"
-import { InventoryItem, Customer } from "@prisma/client";
+import { parseZodSchema, TransactionData, transactionSchema } from "@/lib/zodSchemas"
+import { InventoryItem, Customer, FinancialDetails } from "@prisma/client";
 import { useState, useEffect } from "react"
 import { getUserData } from "@/actions/getUserData";
 import { CustomDatePicker } from "./CustomFormFields/CustomDatePicker";
 import { CustomTextareaField } from "./CustomFormFields/CustomTextareaField";
 import { Form } from "./ui/form"
 import ButtonSubmit from "./ButtonSubmit";
+import { createTransactionWithFinancialDetails } from "@/actions/addTransactionAction";
 
 const TransactionInputDialog = () => {
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -79,8 +80,24 @@ const TransactionInputDialog = () => {
     })
 
     const onSubmit = async (data: TransactionData) => {
-        console.log(data)
-        // Implement your submit logic here
+        console.log(data);
+        setSubmitStatus('loading')
+        try {
+            const parsedData = parseZodSchema(transactionSchema, data);
+            const result = await createTransactionWithFinancialDetails(parsedData);
+            if (result.success) {
+                setSubmitStatus('success')
+                form.reset()
+                setTimeout(() => {
+                    setSubmitStatus('idle')
+                }, 2000)
+            } else {
+                setSubmitStatus('error')
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setSubmitStatus('error')
+        }
     }
 
     return (

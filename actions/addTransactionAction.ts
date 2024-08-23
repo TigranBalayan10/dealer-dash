@@ -1,13 +1,12 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { TransactionData, FinancialDetails } from "@/lib/zodSchemas";
+import { TransactionData } from "@/lib/zodSchemas";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 export async function createTransactionWithFinancialDetails(
-  transactionData: TransactionData,
-  financialDetailsData: FinancialDetails
+  data: TransactionData
 ) {
   const { userId } = auth();
 
@@ -25,12 +24,14 @@ export async function createTransactionWithFinancialDetails(
   }
 
   try {
+    const { financialDetails, ...transactionData } = data;
+
     const result = await prisma.transaction.create({
       data: {
         ...transactionData,
         userId: user.id, // Use the database user ID
         financialDetails: {
-          create: financialDetailsData,
+          create: financialDetails,
         },
       },
       include: {

@@ -51,23 +51,30 @@ export const inventoryItemSchema = z.object({
 const financialDetailsSchema = z.object({
   downPayment: z
     .number({ invalid_type_error: "Down payment must be a number." })
-    .min(0, "Down payment cannot be negative.").optional(),
+    .min(0, "Down payment cannot be negative.")
+    .nullable(),
   monthlyPayment: z
     .number({ invalid_type_error: "Monthly payment must be a number." })
-    .min(0, "Monthly payment cannot be negative.").optional(),
+    .min(0, "Monthly payment cannot be negative.")
+    .nullable(),
   leaseTerm: z
     .number({ invalid_type_error: "Term must be a number." })
-    .min(0, "Term cannot be negative.").optional(),
+    .min(0, "Term cannot be negative.")
+    .nullable(),
   interestRate: z
     .number({ invalid_type_error: "APR must be a number." })
-    .min(0, "APR cannot be negative.").optional(),
+    .min(0, "APR cannot be negative.")
+    .nullable(),
   totalLeaseCost: z
     .number({ invalid_type_error: "Total lease cost must be a number." })
-    .min(0, "Total lease cost cannot be negative.").optional(),
+    .min(0, "Total lease cost cannot be negative.")
+    .nullable(),
   residualValue: z
     .number({ invalid_type_error: "Residual value must be a number." })
-    .min(0, "Residual value cannot be negative.").optional(),
+    .min(0, "Residual value cannot be negative.")
+    .nullable(),
 });
+
 export const transactionSchema = z.object({
   type: z.enum(["BROKER", "SALE", "LEASE"], {
     errorMap: () => ({ message: "Please select a valid transaction type." }),
@@ -78,7 +85,7 @@ export const transactionSchema = z.object({
   commission: z
     .number({ invalid_type_error: "Price must be a number." })
     .min(0, "Price cannot be negative."),
-  date: z.date().default(() => new Date()),
+  date: z.date(),
   notes: z.string().optional(),
   inventoryItemId: z.string().trim(),
   customerId: z.string().trim(),
