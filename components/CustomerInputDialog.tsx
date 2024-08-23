@@ -22,6 +22,7 @@ import { useState } from "react"
 import { Form } from "./ui/form"
 import ButtonSubmit from "./ButtonSubmit";
 import { CustomDatePicker } from "./CustomFormFields/CustomDatePicker";
+import { addCustomer } from "@/actions/addCustomerAction";
 
 const CustomerInputDialog = () => {
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -35,14 +36,36 @@ const CustomerInputDialog = () => {
             address: "",
             city: "",
             state: "CA",
-            zip: "",
+            zipCode: "",
             ssn: "",
             dateOfBirth: new Date(),
             licenseNumber: "",
         },
     })
     const onSubmit = async (data: CustomerData) => {
-        console.log(data)
+        setSubmitStatus('loading')
+        try {
+            const parsedData = parseZodSchema(customerSchema, data);
+            const result = await addCustomer(parsedData);
+            if (result.success) {
+                setSubmitStatus('success')
+                form.reset()
+                setTimeout(() => {
+                    setSubmitStatus('idle')
+                }, 2000)
+            } else {
+                setSubmitStatus('error')
+                setTimeout(() => {
+                    setSubmitStatus('idle')
+                }, 2000)
+            }
+        } catch (error) {
+            console.error("Failed to add customer:", error);
+            setSubmitStatus('error')
+            setTimeout(() => {
+                setSubmitStatus('idle')
+            }, 2000)
+        }
     }
 
     return (
@@ -115,7 +138,7 @@ const CustomerInputDialog = () => {
                             />
                             <CustomFormField <CustomerData>
                                 form={form}
-                                name="zip"
+                                name="zipCode"
                                 label="Zip"
                                 placeholder="12345"
                             />

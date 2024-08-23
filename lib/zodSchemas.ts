@@ -99,21 +99,39 @@ export const customerSchema = z.object({
   phone: z
     .string()
     .regex(/^[0-9]+$/, { message: "Invalid phone number" })
-    .length(10, { message: "Phone number must be 10 digits" })
-    .transform(
-      (val) => `${val.slice(0, 3)}-${val.slice(3, 6)}-${val.slice(6, 10)}`
-    ),
+    .length(10, { message: "Phone number must be 10 digits" }),
   address: z.string().trim().min(1, "Address is required."),
   city: z.string().trim().min(1, "City is required."),
   state: z.string().trim().length(2, { message: "State must be 2 characters" }),
-  zip: z.string().trim().length(5, { message: "Zip code must be 5 digits" }),
-  ssn: z.string().trim().length(9, { message: "SSN must be 9 digits" }),
+  zipCode: z
+    .string()
+    .trim()
+    .length(5, { message: "Zip code must be 5 digits" }),
+  ssn: z
+    .string()
+    .trim()
+    .length(9, { message: "SSN must be 9 digits" })
+    .optional(),
   dateOfBirth: z.date(),
-  licenseNumber: z.string().trim().min(1, "License number is required."),
+  licenseNumber: z
+    .string()
+    .trim()
+    .min(1, "License number is required.")
+    .optional(),
 });
 
 export function parseZodSchema<T>(schema: z.ZodSchema<T>, data: unknown): T {
-  return schema.parse(data);
+  try {
+    return schema.parse(data);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      console.error(
+        "Zod validation errors:",
+        JSON.stringify(error.errors, null, 2)
+      );
+    }
+    throw error;
+  }
 }
 
 export type LoginData = z.infer<typeof loginSchema>;
