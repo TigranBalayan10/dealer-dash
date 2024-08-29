@@ -12,6 +12,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import EditInventoryDialog from "@/components/EditInventoryDialog";
 import Link from "next/link";
 
 export const columns: ColumnDef<InventoryItem>[] = [
@@ -110,16 +111,11 @@ export const columns: ColumnDef<InventoryItem>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>
-                            <Link href={`/dashboard/inventory/${InventoryItem.id}`}>
-                                View inventory
-                            </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <Link href={`/dashboard/inventory/edit/${InventoryItem.id}`}>
-                                Edit inventory
-                            </Link>
-                        </DropdownMenuItem>
+                        <ul className="py-1 flex flex-col">
+                            <li>
+                                <EditInventoryDialog inventoryId={InventoryItem.id} />
+                            </li>
+                        </ul>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )

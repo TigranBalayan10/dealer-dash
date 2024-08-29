@@ -5,9 +5,10 @@ interface ButtonSubmitProps {
     submitStatus: 'idle' | 'loading' | 'success' | 'error';
     buttonText: string;
     className?: string;
+    onClick?: () => void;
 }
 
-const ButtonSubmit: React.FC<ButtonSubmitProps> = ({ submitStatus, buttonText, className }) => {
+const ButtonSubmit: React.FC<ButtonSubmitProps> = ({ submitStatus, buttonText, className, onClick }) => {
     const getButtonContent = () => {
         switch (submitStatus) {
             case 'loading':
@@ -50,6 +51,7 @@ const ButtonSubmit: React.FC<ButtonSubmitProps> = ({ submitStatus, buttonText, c
     return (
         <Button
             type="submit"
+            onClick={onClick}
             disabled={submitStatus === 'loading'}
             className={`${className} ${getButtonClass()}`}
         >

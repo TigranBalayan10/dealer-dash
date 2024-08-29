@@ -14,6 +14,7 @@ interface CustomFormFieldProps<T extends Record<string, any>> {
     name: FieldPath<T>;
     label: string;
     placeholder?: string;
+    disabled?: boolean;
     type?: string;
     inputComponent?: React.ComponentType<any>;
 }
@@ -24,6 +25,7 @@ export function CustomFormField<T extends Record<string, any>>({
     label,
     placeholder,
     type = 'text',
+    disabled = false,
     inputComponent: InputComponent = Input,
 }: CustomFormFieldProps<T>) {
     return (
@@ -41,6 +43,7 @@ export function CustomFormField<T extends Record<string, any>>({
                                 <InputComponent
                                     placeholder={placeholder}
                                     type={type}
+                                    disabled={disabled}
                                     inputMode={type === 'number' ? 'numeric' : 'text'}
                                     pattern={type === 'number' ? '[0-9]*' : undefined}
                                     {...controllerField}

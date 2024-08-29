@@ -24,6 +24,7 @@ interface CustomSelectFieldProps<T extends Record<string, any>> {
     form: UseFormReturn<T>;
     name: FieldPath<T>;
     label: string;
+    disabled?: boolean;
     placeholder?: string;
     options: Option[];
 }
@@ -33,6 +34,7 @@ export function CustomSelectField<T extends Record<string, any>>({
     name,
     label,
     placeholder,
+    disabled = false,
     options,
 }: CustomSelectFieldProps<T>) {
     return (
@@ -52,7 +54,7 @@ export function CustomSelectField<T extends Record<string, any>>({
                             </SelectTrigger>
                             <SelectContent>
                                 {options.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>
+                                    <SelectItem disabled={disabled} key={option.value} value={option.value}>
                                         {option.label}
                                     </SelectItem>
                                 ))}

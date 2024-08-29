@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Status } from "@prisma/client";
 
 export const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email({ message: "Invalid email" }),
@@ -37,9 +38,7 @@ export const inventoryItemSchema = z.object({
     .nullable()
     .refine((val) => val !== null, { message: "Price is required." }),
   description: z.string().optional(),
-  status: z.enum(["AVAILABLE", "RESERVED", "SOLD", "LEASED"], {
-    errorMap: () => ({ message: "Please select a valid status." }),
-  }),
+  status: z.nativeEnum(Status),
   vin: z
     .string()
     .trim()
