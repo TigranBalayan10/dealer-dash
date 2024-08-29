@@ -7,6 +7,7 @@ import { Form } from "@/components/ui/form"
 import ButtonSubmit from "./ButtonSubmit";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogFooter } from "./ui/dialog";
+import { Button } from "./ui/button";
 
 interface InventoryFormProps {
     onSubmit: (data: InventoryItemData) => Promise<void>;
@@ -105,11 +106,7 @@ const InventoryForm: React.FC<InventoryFormProps> = ({
                 />
                 <DialogFooter>
                     {mode === 'edit' && !isEditing ? (
-                        <ButtonSubmit
-                            submitStatus="idle"
-                            buttonText="Enable Editing"
-                            onClick={onEnableEdit}
-                        />
+                       <Button  onClick={onEnableEdit}>Edit</Button>
                     ) : (
                         <ButtonSubmit
                             submitStatus={submitStatus}
