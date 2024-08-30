@@ -48,10 +48,35 @@ export async function getInventoryById(id: string) {
   }
 }
 
-export async function updateInventory(
-  id: string,
-  data: InventoryItemData
-): Promise<void> {
-  // Implement your update logic here
-  // This could be a database update or an API call
+export async function updateInventory(id: string, data: InventoryItemData) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      return { success: false, error: "User not authenticated" };
+    }
+    const user = await prisma.user.findUnique({
+      where: { clerkId: userId },
+    });
+    if (!user) {
+      return { success: false, error: "User not found in the database" };
+    }
+    const inventoryItem = await prisma.inventoryItem.findUnique({
+      where: { id },
+    });
+    if (!inventoryItem) {
+      return { success: false, error: "Inventory item not found" };
+    }
+    const updatedInventory = await prisma.inventoryItem.update({
+      where: { id },
+      data: {
+        ...data,
+        userId: user.id,
+      },
+    });
+    revalidatePath("/dashboard/inventory");
+    return { success: true, inventory: updatedInventory };
+  } catch (error) {
+    console.error("Failed to update inventory:", error);
+    return { success: false, error: "Failed to update inventory" };
+  }
 }

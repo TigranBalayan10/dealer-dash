@@ -11,8 +11,9 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Icon } from "@iconify/react/dist/iconify.js"
-import { InventoryItemData } from "@/lib/zodSchemas"
-import { getInventoryById } from "@/actions/InventoryActions";
+import { InventoryItemData, inventoryItemSchema } from "@/lib/zodSchemas"
+import { getInventoryById, updateInventory } from "@/actions/InventoryActions";
+import { parseZodSchema } from "@/lib/zodSchemas";
 import InventoryForm from "./InventoryForm";
 
 interface EditInventoryDialogProps {
@@ -28,10 +29,28 @@ const EditInventoryDialog: React.FC<EditInventoryDialogProps> = ({ inventoryId }
 
     const onSubmit = async (data: InventoryItemData) => {
         setSubmitStatus('loading');
-        console.log(data);
-        // Implement your update logic here
-        setSubmitStatus('success');
-        setIsOpen(false);
+        try {
+            const parsedData = parseZodSchema(inventoryItemSchema, data);
+            if (parsedData.year === null || parsedData.price === null) {
+                throw new Error("Year and price must be provided");
+            }
+            const result = await updateInventory(inventoryId, {
+                ...parsedData,
+                year: parsedData.year,
+                price: parsedData.price,
+                status: parsedData.status,
+            });
+            if (!result.success) {
+                throw new Error("Failed to update inventory");
+            }
+            setSubmitStatus('success');
+        } catch (error) {
+            console.error("Error updating inventory:", error);
+            setSubmitStatus("error");
+        }
+        setTimeout(() => {
+            setIsOpen(false);
+        }, 3000);
     }
 
     const fetchInventoryItem = useCallback(async () => {
