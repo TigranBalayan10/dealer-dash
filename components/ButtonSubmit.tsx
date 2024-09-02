@@ -1,3 +1,5 @@
+// ButtonSubmit.tsx
+
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button } from "@/components/ui/button";
 
@@ -8,7 +10,12 @@ interface ButtonSubmitProps {
     onClick?: () => void;
 }
 
-const ButtonSubmit: React.FC<ButtonSubmitProps> = ({ submitStatus, buttonText, className, onClick }) => {
+const ButtonSubmit: React.FC<ButtonSubmitProps> = ({
+    submitStatus,
+    buttonText,
+    className,
+    onClick,
+}) => {
     const getButtonContent = () => {
         switch (submitStatus) {
             case 'loading':
@@ -37,23 +44,12 @@ const ButtonSubmit: React.FC<ButtonSubmitProps> = ({ submitStatus, buttonText, c
         }
     };
 
-    const getButtonClass = () => {
-        switch (submitStatus) {
-            case 'success':
-                return 'bg-green-500 hover:bg-green-600';
-            case 'error':
-                return 'bg-red-500 hover:bg-red-600';
-            default:
-                return '';
-        }
-    };
-
     return (
         <Button
             type="submit"
             onClick={onClick}
             disabled={submitStatus === 'loading'}
-            className={`${className} ${getButtonClass()}`}
+            className={`${className}`}
         >
             {getButtonContent()}
         </Button>

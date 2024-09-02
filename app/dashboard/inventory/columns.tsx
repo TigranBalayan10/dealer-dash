@@ -12,8 +12,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import EditInventoryDialog from "@/components/EditInventoryDialog";
-import Link from "next/link";
+import { useState } from "react";
+import EditInventorySheet from "@/components/Sheets/EditInventorySheet";
 
 export const columns: ColumnDef<InventoryItem>[] = [
     {
@@ -99,25 +99,31 @@ export const columns: ColumnDef<InventoryItem>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
-            const InventoryItem = row.original
+            const [isOpen, setIsOpen] = useState(false);
+            const inventoryItem = row.original
 
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <Icon icon="mdi:more-horiz" className="h-5 w-5" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <ul className="py-1 flex flex-col">
-                            <li>
-                                <EditInventoryDialog inventoryId={InventoryItem.id} />
-                            </li>
-                        </ul>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <Icon icon="mdi:more-horiz" className="h-5 w-5" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem onSelect={() => setIsOpen(true)}>
+                                Edit Inventory
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <EditInventorySheet
+                        inventoryId={inventoryItem.id}
+                        isOpen={isOpen}
+                        onOpenChange={setIsOpen}
+                    />
+                </>
             )
         },
     },

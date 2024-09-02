@@ -2,7 +2,6 @@ import { InventoryItemData, inventoryItemSchema } from "@/lib/zodSchemas"
 import { CustomFormField } from "./CustomFormFields/CustomFormField"
 import { CustomSelectField } from "./CustomFormFields/CustomSelectField";
 import { useForm } from "react-hook-form"
-import { useState } from "react"
 import { Form } from "@/components/ui/form"
 import ButtonSubmit from "./ButtonSubmit";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -106,7 +105,7 @@ const InventoryForm: React.FC<InventoryFormProps> = ({
                 />
                 <DialogFooter>
                     {mode === 'edit' && !isEditing ? (
-                       <Button  onClick={onEnableEdit}>Edit</Button>
+                        <Button variant="outline" onClick={onEnableEdit}>Edit</Button>
                     ) : (
                         <ButtonSubmit
                             submitStatus={submitStatus}

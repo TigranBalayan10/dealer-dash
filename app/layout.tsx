@@ -17,13 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <main className="flex-1 overflow-auto">
-            {children}
-          </main>
-        </body>
-      </html>
-    </ClerkProvider >
+        <html lang="en">
+          <body className={inter.className}>
+            <main className="flex-1 overflow-auto">
+              {children}
+            </main>
+          </body>
+        </html>
+    </ClerkProvider>
   );
 }

@@ -18,6 +18,7 @@ import InventoryForm from "./InventoryForm";
 
 const InputDialog = () => {
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    
 
     const onSubmit = async (data: InventoryItemData) => {
         setSubmitStatus('loading');
@@ -39,7 +40,6 @@ const InputDialog = () => {
             }
 
             setSubmitStatus('success');
-            // You might want to update the local state or trigger a refetch here
         } catch (error) {
             console.error("Error adding inventory:", error);
             setSubmitStatus('error');
