@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { InventoryItem } from "@prisma/client";
 import {
     Sheet,
     SheetContent,
@@ -9,50 +10,32 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet"
 import { InventoryItemData, inventoryItemSchema } from "@/lib/zodSchemas"
-import { getInventoryById, updateInventory } from "@/actions/InventoryActions";
+import { updateInventory } from "@/actions/InventoryActions";
 import { parseZodSchema } from "@/lib/zodSchemas";
 import InventoryForm from "@/components/InventoryForm";
-import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface EditInventorySheetProps {
-    inventoryId: string;
+    inventoryItem: InventoryItem;
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
 
 const EditInventorySheet: React.FC<EditInventorySheetProps> = ({
-    inventoryId,
+    inventoryItem,
     isOpen,
     onOpenChange
 }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [inventoryItem, setInventoryItem] = useState<InventoryItemData | null>(null);
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-
-    useEffect(() => {
-        if (isOpen && !inventoryItem) {
-            setIsLoading(true);
-            getInventoryById(inventoryId)
-                .then((result) => {
-                    if (result.success && result.inventoryItem) {
-                        setInventoryItem(result.inventoryItem);
-                        setIsEditing(false);
-                    } else {
-                        console.error("Failed to get inventory item:", result.error);
-                        setInventoryItem(null);
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error fetching inventory item:", error);
-                    setInventoryItem(null);
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                });
-        }
-    }, [inventoryId, isOpen, inventoryItem]);
+    const initialValues: InventoryItemData = {
+        make: inventoryItem.make,
+        model: inventoryItem.model,
+        year: inventoryItem.year,
+        price: inventoryItem.price,
+        status: inventoryItem.status,
+        vin: inventoryItem.vin,
+    };
 
     const onSubmit = async (data: InventoryItemData) => {
         setSubmitStatus('loading');
@@ -61,7 +44,7 @@ const EditInventorySheet: React.FC<EditInventorySheetProps> = ({
             if (parsedData.year === null || parsedData.price === null) {
                 throw new Error("Year and price must be provided");
             }
-            const result = await updateInventory(inventoryId, {
+            const result = await updateInventory(inventoryItem.id, {
                 ...parsedData,
                 year: parsedData.year,
                 price: parsedData.price,
@@ -78,17 +61,8 @@ const EditInventorySheet: React.FC<EditInventorySheetProps> = ({
         }
     }
 
-    const handleOpenChange = (open: boolean) => {
-        if (!open) {
-            setInventoryItem(null);
-            setIsEditing(false);
-            setSubmitStatus('idle');
-        }
-        onOpenChange(open);
-    }
-
     return (
-        <Sheet open={isOpen} onOpenChange={handleOpenChange}>
+        <Sheet open={isOpen} onOpenChange={onOpenChange}>
             <SheetContent>
                 <SheetHeader>
                     <SheetTitle>
@@ -98,25 +72,14 @@ const EditInventorySheet: React.FC<EditInventorySheetProps> = ({
                         Edit the details of the inventory item
                     </SheetDescription>
                 </SheetHeader>
-                {isLoading ? (
-                    <div className="p-4 text-center">
-                        <Icon icon="mdi:loading" className="w-6 h-6 animate-spin text-primary" />
-                    </div>
-                ) : inventoryItem ? (
-                    <InventoryForm
-                        onSubmit={onSubmit}
-                        mode="edit"
-                        initialValues={inventoryItem}
-                        isEditing={isEditing}
-                        onEnableEdit={() => setIsEditing(true)}
-                        submitStatus={submitStatus}
-                    />
-                ) : (
-                    <h3 className="p-4 text-center text-red-400">
-                        Failed to load inventory item. Please try again.
-                    </h3>
-                )
-                }
+                <InventoryForm
+                    onSubmit={onSubmit}
+                    mode="edit"
+                    initialValues={initialValues}
+                    isEditing={isEditing}
+                    onEnableEdit={() => setIsEditing(true)}
+                    submitStatus={submitStatus}
+                />
             </SheetContent>
         </Sheet>
     )

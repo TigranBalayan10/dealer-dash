@@ -119,7 +119,7 @@ export const columns: ColumnDef<InventoryItem>[] = [
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <EditInventorySheet
-                        inventoryId={inventoryItem.id}
+                        inventoryItem={inventoryItem}
                         isOpen={isOpen}
                         onOpenChange={setIsOpen}
                     />
