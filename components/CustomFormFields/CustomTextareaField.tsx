@@ -16,6 +16,7 @@ interface CustomFormFieldProps<T extends Record<string, any>> {
     label: string;
     placeholder?: string;
     description?: string;
+    disabled?: boolean;
 }
 
 
@@ -25,6 +26,7 @@ export function CustomTextareaField<T extends Record<string, any>>({
     label,
     placeholder,
     description,
+    disabled,
 }: CustomFormFieldProps<T>) {
     return (
         <FormField
@@ -36,6 +38,7 @@ export function CustomTextareaField<T extends Record<string, any>>({
                     <FormControl>
                         <Controller
                             name={name}
+                            disabled={disabled}
                             control={form.control}
                             render={({ field: controllerField }) => (
                                 <Textarea
