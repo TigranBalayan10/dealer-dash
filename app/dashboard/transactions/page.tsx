@@ -18,6 +18,7 @@ const getData = async (userId: string) => {
         include: {
             inventoryItem: true,
             customer: true,
+            financialDetails: true,
         }
     })
 }

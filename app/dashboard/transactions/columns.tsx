@@ -1,7 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Transaction, TransactionType, Customer, InventoryItem } from "@prisma/client"
+import { Transaction, TransactionType, Customer, InventoryItem, FinancialDetails } from "@prisma/client"
 import { formatDateShort } from "@/lib/dateFormatter"
 import { Icon } from '@iconify/react';
 import { Button } from "@/components/ui/button"
@@ -13,8 +13,10 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link";
+import { useState } from "react";
+import EditTransactionSheet from "@/components/Sheets/EditTransactionSheet";
 
-export const columns: ColumnDef<Transaction>[] = [
+export const columns: ColumnDef<Transaction & { financialDetails: FinancialDetails | null; customer: Customer | null; inventoryItem: InventoryItem | null }>[] = [
     {
         accessorKey: "customer",
         header: "Customer",
@@ -117,25 +119,31 @@ export const columns: ColumnDef<Transaction>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
-            const customer = row.original
+            const [isOpen, setIsOpen] = useState(false);
+            const transactionItem = row.original;
 
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <Icon icon="mdi:more-horiz" className="h-5 w-5" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>
-                            <Link href={`/dashboard/customers/${customer.id}`}>
-                                View customer
-                            </Link>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <Icon icon="mdi:more-horiz" className="h-5 w-5" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem onSelect={() => setIsOpen(true)}>
+                                Edit Transaction
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <EditTransactionSheet
+                        transactionItem={transactionItem}
+                        isOpen={isOpen}
+                        onOpenChange={setIsOpen}
+                    />
+                </>
             )
         },
     },
