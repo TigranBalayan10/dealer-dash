@@ -114,7 +114,10 @@ export const columns: ColumnDef<InventoryItem>[] = [
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem onSelect={() => setIsOpen(true)}>
-                                Edit Inventory
+                                Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">
+                                Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
