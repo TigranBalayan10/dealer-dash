@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useState } from "react";
 import EditInventorySheet from "@/components/Sheets/EditInventorySheet";
+import DeleteInventoryItem from "@/components/DeleteInventoryItem";
 
 export const columns: ColumnDef<InventoryItem>[] = [
     {
@@ -116,9 +117,7 @@ export const columns: ColumnDef<InventoryItem>[] = [
                             <DropdownMenuItem onSelect={() => setIsOpen(true)}>
                                 Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">
-                                Delete
-                            </DropdownMenuItem>
+                            <DeleteInventoryItem id={inventoryItem.id} />
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <EditInventorySheet
