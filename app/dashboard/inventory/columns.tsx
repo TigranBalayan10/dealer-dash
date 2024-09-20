@@ -113,9 +113,8 @@ export const columns: ColumnDef<InventoryItem>[] = [
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onSelect={() => setIsOpen(true)}>
-                                Edit
+                            <DropdownMenuItem className="p-0" onSelect={() => setIsOpen(true)}>
+                                <Button variant="link">Edit</Button>
                             </DropdownMenuItem>
                             <DeleteInventoryItem id={inventoryItem.id} />
                         </DropdownMenuContent>

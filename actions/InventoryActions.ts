@@ -81,24 +81,23 @@ export async function updateInventory(id: string, data: InventoryItemData) {
   }
 }
 
-
 export async function deleteInventory(id: string) {
   try {
     const { userId } = auth();
     if (!userId) {
-      return { success: false, error: "User not authenticated" };
+      throw new Error("User not authenticated");
     }
     const user = await prisma.user.findUnique({
       where: { clerkId: userId },
     });
     if (!user) {
-      return { success: false, error: "User not found in the database" };
+      throw new Error("User not found in the database");
     }
     const inventoryItem = await prisma.inventoryItem.findUnique({
       where: { id },
     });
     if (!inventoryItem) {
-      return { success: false, error: "Inventory item not found" };
+      throw new Error("Inventory item not found");
     }
     await prisma.inventoryItem.delete({
       where: { id },
@@ -107,6 +106,6 @@ export async function deleteInventory(id: string) {
     return { success: true };
   } catch (error) {
     console.error("Failed to delete inventory:", error);
-    return { success: false, error: "Failed to delete inventory" };
+    throw error;
   }
 }
