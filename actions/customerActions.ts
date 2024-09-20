@@ -76,3 +76,32 @@ export async function updateCustomer(id: string, data: CustomerData) {
     return { success: false, error: "Failed to update customer data" };
   }
 }
+
+export async function deleteCustomer(id: string) {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+    const user = await prisma.user.findUnique({
+      where: { clerkId: userId },
+    });
+    if (!user) {
+      throw new Error("User not found in the database");
+    }
+    const customer = await prisma.customer.findUnique({
+      where: { id },
+    });
+    if (!customer) {
+      throw new Error("Customer not found");
+    }
+    await prisma.customer.delete({
+      where: { id },
+    });
+    revalidatePath("/dashboard/customers");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete inventory:", error);
+    throw error;
+  }
+}

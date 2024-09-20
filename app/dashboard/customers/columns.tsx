@@ -15,6 +15,7 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import EditCustomerSheet from "@/components/Sheets/EditCustomerSheet";
+import DeleteCustomer from "@/components/Dialogs/DeleteCustomer";
 
 export const columns: ColumnDef<Customer>[] = [
     {
@@ -109,10 +110,10 @@ export const columns: ColumnDef<Customer>[] = [
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onSelect={() => setIsOpen(true)}>
-                                Edit Inventory
+                            <DropdownMenuItem className="p-0" onSelect={() => setIsOpen(true)}>
+                            <Button variant="link">Edit</Button>
                             </DropdownMenuItem>
+                            <DeleteCustomer id={customer.id} />
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <EditCustomerSheet

@@ -9,12 +9,11 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useState } from "react";
 import EditInventorySheet from "@/components/Sheets/EditInventorySheet";
-import DeleteInventoryItem from "@/components/DeleteInventoryItem";
+import DeleteInventoryItem from "@/components/Dialogs/DeleteInventoryItem";
 
 export const columns: ColumnDef<InventoryItem>[] = [
     {
