@@ -42,3 +42,32 @@ export async function updateTransaction(id: string, data: TransactionData) {
     return { success: false, error: "Failed to update transaction" };
   }
 }
+
+
+export async function deleteTransaction(id: string) {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  // Find the user in the database using the Clerk userId
+  const user = await prisma.user.findUnique({
+    where: { clerkId: userId },
+  });
+
+  if (!user) {
+    throw new Error("User not found in the database");
+  }
+
+  try {
+    await prisma.transaction.delete({
+      where: { id },
+    });
+    revalidatePath("/dashboard/transactions");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting transaction:", error);
+    throw error;
+  }
+}
